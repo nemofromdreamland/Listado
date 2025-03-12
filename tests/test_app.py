@@ -10,7 +10,9 @@ def test_root_deve_retornar_ok_e_ola_mundo(client):
     assert response.json() == {'message': 'Olá Mundão!'}
 
 
-def test_create_user(client):
+def test_create_user(
+    client,
+):
     response = client.post(
         '/users',
         json={
@@ -25,6 +27,32 @@ def test_create_user(client):
         'email': 'alice@example.com',
         'id': 1,
     }
+
+
+def test_create_user_should_return_400_username_exists(client, user):
+    response = client.post(
+        '/users/',
+        json={
+            'username': user.username,
+            'email': 'alice@example.com',
+            'password': 'secret',
+        },
+    )
+    assert response.status_code == HTTPStatus.BAD_REQUEST
+    assert response.json() == {'detail': 'Username already exists'}
+
+
+def test_create_user_should_return_400_email_exists__exercicio(client, user):
+    response = client.post(
+        '/users/',
+        json={
+            'username': 'alice',
+            'email': user.email,
+            'password': 'secret',
+        },
+    )
+    assert response.status_code == HTTPStatus.BAD_REQUEST
+    assert response.json() == {'detail': 'Email already exists'}
 
 
 def test_read_users_with_users(client, user):
@@ -80,3 +108,23 @@ def test_delete_user(client, user):
     response = client.delete('/users/1')
     assert response.status_code == HTTPStatus.OK
     assert response.json() == {'message': 'User deleted'}
+
+
+def test_delete_user_should_return_not_found__exercicio(client):
+    response = client.delete('/users/666')
+
+    assert response.status_code == HTTPStatus.NOT_FOUND
+    assert response.json() == {'detail': 'User not found'}
+
+
+def test_update_user_should_return_not_found__exercicio(client):
+    response = client.put(
+        '/users/666',
+        json={
+            'username': 'bob',
+            'email': 'bob@example.com',
+            'password': 'mynewpassword',
+        },
+    )
+    assert response.status_code == HTTPStatus.NOT_FOUND
+    assert response.json() == {'detail': 'User not found'}

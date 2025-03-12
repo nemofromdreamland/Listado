@@ -11,8 +11,6 @@ from listado.schemas import Message, UserList, UserPublic, UserSchema
 
 app = FastAPI()
 
-database = []
-
 
 @app.get('/', response_model=Message)
 def read_root():
