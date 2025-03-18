@@ -1,6 +1,10 @@
 from pydantic import BaseModel, ConfigDict, EmailStr
 
 
+
+from listado.models import TodoState
+
+
 class Message(BaseModel):
     message: str
 
@@ -22,11 +26,39 @@ class UserList(BaseModel):
     users: list[UserPublic]
 
 
+class Token(BaseModel):
+    access_token: str
+    token_type: str
+
+
 class FilterPage(BaseModel):
     offset: int = 0
     limit: int = 100
 
 
-class Token(BaseModel):
-    access_token: str
-    token_type: str
+class TodoSchema(BaseModel):
+    title: str
+    description: str
+    state: TodoState
+
+
+class TodoPublic(TodoSchema):
+    id: int
+
+
+class TodoList(BaseModel):
+    todos: list[TodoPublic]
+
+
+class FilterTodo(FilterPage):
+    title: str | None = None
+    description: str | None = None
+    state: TodoState | None = None
+
+
+class TodoUpdate(BaseModel):
+    title: str | None = None
+    description: str | None = None
+    state: TodoState | None = None
+
+
