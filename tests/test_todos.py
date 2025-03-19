@@ -6,7 +6,6 @@ import pytest
 from listado.models import Todo, TodoState
 
 
-
 def test_create_todo(client, token):
     response = client.post(
         '/todos/',

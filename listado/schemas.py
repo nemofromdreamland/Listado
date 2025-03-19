@@ -1,7 +1,5 @@
 from pydantic import BaseModel, ConfigDict, EmailStr
 
-
-
 from listado.models import TodoState
 
 
@@ -60,5 +58,3 @@ class TodoUpdate(BaseModel):
     title: str | None = None
     description: str | None = None
     state: TodoState | None = None
-
-
